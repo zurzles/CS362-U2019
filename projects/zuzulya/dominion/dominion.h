@@ -10,6 +10,12 @@
 
 #define DEBUG 0
 
+#define BARON_DISCARD_ESTATE_CARD 1
+#define MINION_GAIN_TWO_COINS 1
+#define MINION_DISCARD_HAND 1
+#define AMBASSADOR_CARD_RETURN_COUNT_MIN 0
+#define AMBASSADOR_CARD_RETURN_COUNT_MAX 2
+
 /* http://dominion.diehrstraits.com has card texts */
 /* http://dominion.isotropic.org has other stuff */
 
@@ -128,4 +134,18 @@ int getWinners(int players[MAX_PLAYERS], struct gameState *state);
 /* Set array position of each player who won (remember ties!) to
    1, others to 0 */
 
+int drewBaronCard(int choice1, int currentPlayer, struct gameState *state);
+/*Steps that occur when a baron card in played*/
+
+int drewAmbassadorCard(int choice1, int choice2, int handPos, int currentPlayer, struct gameState* state);
+/*Steps that occur when a ambassador card in played*/
+
+int drewMinionCard(int choice1, int choice2, int handPos, int currentPlayer, struct gameState* state);
+/*Steps that occur when a minion card in played*/
+
+int drewMineCard(int choice1, int choice2, int currentPlayer, int handPos, struct gameState* state);
+/*Steps that occur when a mine card in played*/
+
+int drewTributeCard(int currentPlayer, int nextPlayer, struct gameState* state);
+/*Steps that occur when a tribute card in played*/
 #endif
