@@ -1030,7 +1030,7 @@ int updateCoins(int player, struct gameState *state, int bonus)
 int drewBaronCard(int choice1, int currentPlayer, struct gameState *state) {
 	
 	state->numBuys++; //Increase buys by 1!
-	printf("Increased buys by 2");
+	printf("Increased buys by 2\n");
 
 	if (choice1 == BARON_DISCARD_ESTATE_CARD) { //Boolean true or going to discard an estate
 		int p = 0; //Iterator for hand!
