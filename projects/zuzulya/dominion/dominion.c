@@ -309,7 +309,8 @@ int buyCard(int supplyPos, struct gameState *state) {
 }
 
 int numHandCards(struct gameState *state) {
-  return state->handCount[ whoseTurn(state) ];
+ 	printf("NumHandCards\n");
+	 return state->handCount[ whoseTurn(state) ];
 }
 
 int handCard(int handPos, struct gameState *state) {
@@ -809,7 +810,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case minion:
-		return drewMinionCard(choice1, choice2, handPos, currentPlayer, state);
+		return drewMinionCard(choice1, handPos, currentPlayer, state);
 
     case steward:
       if (choice1 == 1)	{
@@ -945,15 +946,21 @@ int discardCard(int handPos, int currentPlayer, struct gameState *state, int tra
 	
   //if card is not trashed, added to Played pile 
   if (trashFlag < 1) {
+	printf("trash card < 1\n");
       //add card to played pile
-      state->playedCards[state->playedCardCount] = state->hand[currentPlayer][handPos]; 
-      state->playedCardCount++;
-  }
-	
+      printf("played cards: &d\n", state->playedCards[state->playedCardCount]);
+	printf("hand: &d\n", state->hand[currentPlayer][handPos]);
+	state->playedCards[state->playedCardCount] = state->hand[currentPlayer][handPos]; 
+      printf("added\n");
+	state->playedCardCount++;
+ 	printf("increased\n");
+ }
+	printf("made it here\n");	
   //set played card to -1
   state->hand[currentPlayer][handPos] = -1;
 	
   //remove card from player's hand
+  printf("remove card\n");
   if ( handPos == (state->handCount[currentPlayer] - 1) ){ 	//last card in hand array is played
       //reduce number of cards in hand
       state->handCount[currentPlayer]--;
@@ -1035,9 +1042,10 @@ int drewBaronCard(int choice1, int currentPlayer, struct gameState *state) {
 	if (choice1 == BARON_DISCARD_ESTATE_CARD) { //Boolean true or going to discard an estate
 		int p = 0; //Iterator for hand!
 		int card_not_discarded = 1; //Flag for discard set!
-		
+		printf("Choice1 selected\n");		
 		while (card_not_discarded) {
 			if (state->hand[currentPlayer][p] == estate) { //Found an estate card!
+				printf("found an estate card\n");
 				state->coins += 4;//Add 4 coins to the amount of coins
 				state->discard[currentPlayer][state->discardCount[currentPlayer]] = state->hand[currentPlayer][p];
 				state->discardCount[currentPlayer]++;
@@ -1048,27 +1056,33 @@ int drewBaronCard(int choice1, int currentPlayer, struct gameState *state) {
 				state->handCount[currentPlayer]--;
 				card_not_discarded = 0; //Exit the while loop
 			} else if (p > state->handCount[currentPlayer]) {
-				if (DEBUG) {
+				
+			//	if (DEBUG) {
 					printf("No estate cards in your hand, invalid choice\n");
 					printf("Must gain an estate if there are any\n");
-				}
+			//	}
 				if (supplyCount(estate, state) > 0) {
+					printf("Card in supply\n"); 
 					gainCard(estate, state, 0, currentPlayer);
 					state->supplyCount[estate]--;//Decrement estates
-					if (supplyCount(estate, state) == 0) {
-						isGameOver(state);
-					}
+					card_not_discarded = 0;
+				}	
+				if (supplyCount(estate, state) == 0) {
+					printf("Isgame over\n");	
+					return isGameOver(state);
 				}
+				 
 			} else { //Next card
 				p++;
 			}
 		}
 	} else {
+		printf("Not choice1");
 		if (supplyCount(estate, state) > 0) {
 			gainCard(estate, state, 0, currentPlayer); //Gain an estate
 			state->supplyCount[estate]--; //Decrement Estates
 			if (supplyCount(estate, state) == 0) {
-				isGameOver(state);
+				return isGameOver(state);
 			}
 		}
 	}
@@ -1077,28 +1091,38 @@ int drewBaronCard(int choice1, int currentPlayer, struct gameState *state) {
 
 }
 
-int drewMinionCard(int choice1, int choice2, int handPos, int currentPlayer, struct gameState* state) {
+int drewMinionCard(int choice1, int handPos, int currentPlayer, struct gameState* state) {
 	//+1 action
+	printf("NumActions++");
 	state->numActions++;
 
 	//discard card from hand
+	printf("Discard\n");	
 	discardCard(handPos, currentPlayer, state, 0);
-
+	printf("coice1 vs choice2");
 	if (choice1 == MINION_GAIN_TWO_COINS) {		//+2 coins
+		printf("Choice1\n");
 		state->coins = state->coins + 2;
-	} else if (choice2 == MINION_DISCARD_HAND) { //discard hand, redraw 4, other players with 5+ cards discard hand and draw 4
+	} else if (choice1 == MINION_DISCARD_HAND) { //discard hand, redraw 4, other players with 5+ cards discard hand and draw 4
 	
+		printf("Choice2\n");
 		//discard hand
+		printf("Discard\n");	
+		printf("numHandCards(state)\n");
 		while (numHandCards(state) > 0) {
+			printf("Pre\n");
 			discardCard(handPos, currentPlayer, state, 0);
+			printf("Post\n");
 		}
 
 		//draw 4
+		printf("Draw4\n");
 		for (int i = 0; i < 4; i++) {
 			drawCard(currentPlayer, state);
 		}
 
 		//other players discard hand and redraw if hand size > 4
+		printf("Other players discard redraw");	
 		for (int i = 0; i < state->numPlayers; i++) {
 			if (i != currentPlayer) {
 				if (state->handCount[i] > 4) {
@@ -1116,6 +1140,8 @@ int drewMinionCard(int choice1, int choice2, int handPos, int currentPlayer, str
 				}
 			}
 		}
+	}else {
+		printf("Choice1 Out of range");
 	}
 	return 0;
 }
@@ -1173,9 +1199,11 @@ int drewAmbassadorCard(int choice1, int choice2, int handPos, int currentPlayer,
 }
 
 int drewTributeCard(int currentPlayer, int nextPlayer, struct gameState* state) {
+	printf("Start");
 	int tributeRevealedCards[2] = { -1, -1 };
 
 	if ((state->discardCount[nextPlayer] + state->deckCount[nextPlayer]) <= 1) {
+		printf("First if");
 		if (state->deckCount[nextPlayer] > 0) {
 			tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer] - 1];
 			state->deckCount[nextPlayer]--;
@@ -1183,9 +1211,9 @@ int drewTributeCard(int currentPlayer, int nextPlayer, struct gameState* state) 
 			tributeRevealedCards[0] = state->discard[nextPlayer][state->discardCount[nextPlayer] - 1];
 			state->discardCount[nextPlayer]--;
 		} else { //No Card to Reveal
-			if (DEBUG) {
+		//	if (DEBUG) {
 				printf("No cards to reveal\n");
-			}
+		//	}
 		}
 	} else {
 		if (state->deckCount[nextPlayer] == 0) {
@@ -1195,6 +1223,7 @@ int drewTributeCard(int currentPlayer, int nextPlayer, struct gameState* state) 
 				state->discard[nextPlayer][i] = -1;
 				state->discardCount[nextPlayer]--;
 			}
+			printf("Shuffle\n");
 			shuffle(nextPlayer, state);//Shuffle the deck
 		}
 		tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer] - 1];

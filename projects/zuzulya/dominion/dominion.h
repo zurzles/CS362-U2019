@@ -12,7 +12,7 @@
 
 #define BARON_DISCARD_ESTATE_CARD 1
 #define MINION_GAIN_TWO_COINS 1
-#define MINION_DISCARD_HAND 1
+#define MINION_DISCARD_HAND 2
 #define AMBASSADOR_CARD_RETURN_COUNT_MIN 0
 #define AMBASSADOR_CARD_RETURN_COUNT_MAX 2
 
@@ -140,7 +140,7 @@ int drewBaronCard(int choice1, int currentPlayer, struct gameState *state);
 int drewAmbassadorCard(int choice1, int choice2, int handPos, int currentPlayer, struct gameState* state);
 /*Steps that occur when a ambassador card in played*/
 
-int drewMinionCard(int choice1, int choice2, int handPos, int currentPlayer, struct gameState* state);
+int drewMinionCard(int choice1, int handPos, int currentPlayer, struct gameState* state);
 /*Steps that occur when a minion card in played*/
 
 int drewMineCard(int choice1, int choice2, int currentPlayer, int handPos, struct gameState* state);
