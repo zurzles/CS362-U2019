@@ -578,7 +578,6 @@ protected void setUp() {
 	  String[] schemes = {"http","https","ftp","ftps","ssh","gopher"};
 	  UrlValidator validator = new UrlValidator(new String[] {"http","file","mailto"}, UrlValidator.ALLOW_LOCAL_URLS);
 
-	  assertTrue("somebody@google.com should validate",	  validator.isValid("mailto://somebody@google.com"));
 	  assertTrue("http://www.google.com should validate",  validator.isValid("http://www.google.com"));
 	  assertTrue("http://www.google.com/ should validate",  validator.isValid("http://www.google.com/"));
 	  assertTrue("http://www.google.com/apple should validate", validator.isValid("http://www.google.com/apple"));
