@@ -369,6 +369,14 @@ protected void setUp() {
       assertTrue(true);
    }
 
+//This will  test if using upper case of HTTP or HTTPS will work or not
+   public void testValidProtocool(){
+        UrlValidator validator = new UrlValidator();
+        assertTrue(urlValidator.isValid("HTTP://www.google.com/"));
+         assertTrue(urlValidator.isValid("HTTPS://www.google.com/"));
+         assertTrue(urlValidator.isValid("HTTPS://WWW.GOOGLE.COM/"));
+   }
+
    public void testValidator290() {
         UrlValidator validator = new UrlValidator();
         assertTrue(validator.isValid("http://xn--h1acbxfam.idn.icann.org/"));
@@ -495,6 +503,7 @@ protected void setUp() {
        assertTrue(validator.isValid("http://example.com/serach?address=Main+Avenue"));
    }
 
+
    //-------------------- Test data for creating a composite URL
    /**
     * The data given below approximates the 4 parts of a URL
@@ -511,6 +520,7 @@ protected void setUp() {
                                new ResultPair("http:/", false),
                                new ResultPair("http:", false),
                                new ResultPair("http/", false),
+                               new ResultPair("HTTP://", true), //introduced all UPPER case
                                new ResultPair("://", false)};
 
    ResultPair[] testUrlAuthority = {new ResultPair("www.google.com", true),
