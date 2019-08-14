@@ -538,7 +538,7 @@ protected void setUp() {
 	  assertTrue("www.facebook.fr should validate",validator.isValid("http://www.facebook.fr"));
 	  assertTrue("127.0.0.1 should validate", validator.isValid("http://127.0.0.1"));
 	  assertTrue("255.255.255.255 should validate",	validator.isValid("http://255.255.255.255"));
-	  assertTrue("http://1337.net should validate",	validator.isValid("http://1337.net"));
+	  assertTrue("http://google.net should validate",	validator.isValid("http://google.net"));
 	  assertFalse("www.facebook.corm should not validate",validator.isValid("www.facebook.corm"));
 	  assertFalse(" should not validate", validator.isValid(""));
 	  assertFalse("zzz should not validate",validator.isValid("zzz"));
@@ -546,8 +546,8 @@ protected void setUp() {
 	  assertTrue(":80 should validate",validator.isValid("http://www.google.com:80"));
 	  assertTrue(":65500 should validate",validator.isValid("http://www.google.com:65500"));
 	  assertTrue("http://www.google.com:0 should validate", validator.isValid("http://www.google.com:0"));
-	  assertFalse(":0 should validate", validator.isValid("http://:0"));
-	  assertFalse(":0 should validate", validator.isValid(":0"));
+	  assertFalse(":0 should not validate", validator.isValid("http://:0"));
+	  assertFalse(":0 should not validate", validator.isValid(":0"));
 	  assertTrue("http://142.42.1.1:8080/ should validate",	  validator.isValid("http://142.42.1.1:8080/"));
 	  assertFalse("http://142.42.1.1:8080/ should not validate",	  validator.isValid("142.42.1.1:8080/"));
 	  assertFalse(":dfs should not validate", validator.isValid("http://:dfs"));
@@ -563,7 +563,7 @@ protected void setUp() {
 
 	  assertTrue("/ should validate", validator.isValid("http://aaa/"));
 	  assertTrue("/aaa should validate", validator.isValid("http://aaa"));
-	  assertFalse("/aaa/ should validate", validator.isValid("http://aaa//"));
+	  assertFalse("/aaa/ should t validate", validator.isValid("http://aaa//"));
 	  assertTrue("/aaa/ should validate", validator.isValid("http://aaa/aaa/"));
 	  assertTrue("/aaa/file should validate", validator.isValid("http://aaa/file"));
 	  assertTrue("/3783 should validate", validator.isValid("http://3783"));
@@ -596,14 +596,15 @@ protected void setUp() {
 	  assertFalse("//hello should cot validate", validator.isValid("//hello"));
 	  assertFalse("//hello/file should not validate",	  validator.isValid("//hello/file"));
 	  assertFalse("/hello//file should not validate",	  validator.isValid("/hello//file"));
-	  assertFalse("hello/�/ should not validate", validator.isValid("hello/�/"));
-	  assertFalse("/hello/�/ should not validate", validator.isValid("/hello/�/"));
-	  assertFalse("://�/ should not validate", validator.isValid("://�/"));
-	  assertFalse("http://-a.b.c should not validate",	  validator.isValid("http://-a.b.c"));
-	  assertFalse("http://a.-b.c should not validate",	  validator.isValid("http://a.-b.c"));
-	  assertFalse("http://a.b.,c should not validate",	  validator.isValid("http://a.b.,c"));
+	  assertFalse("hello/../ should not validate", validator.isValid("hello/../"));
+	  assertFalse("/hello/../ should not validate", validator.isValid("/hello/../"));
+	  assertFalse("://../ should not validate", validator.isValid("://../"));
+	  assertFalse("http://a.a.!a should not validate",	  validator.isValid("http://-a.a.!a"));
+	  assertFalse("http://-a.a.a should not validate",	  validator.isValid("http://-a.a.a"));
+	  assertFalse("http://a.-a.a should not validate",	  validator.isValid("http://a.-a.a"));
+	  assertFalse("http://a.a.,a should not validate",	  validator.isValid("http://a.a.,a"));
 	  assertFalse(" should not validate",	  validator.isValid(""));
-	  assertFalse("javascript:alert(0);� should not validate",	  validator.isValid("javascript:alert(0);�"));
+	  assertFalse("javascript:alert(0) should not validate",	  validator.isValid("javascript:alert(0)"));
 	  assertFalse("dot:. should not validate", validator.isValid("dot:."));
 	  assertFalse("javascript:alert('xss') should not validate",	  validator.isValid("javascript:alert('xss')"));
 	  assertFalse("http://142.42.1.1// should not validate",	  validator.isValid("http://142.42.1.1//"));
