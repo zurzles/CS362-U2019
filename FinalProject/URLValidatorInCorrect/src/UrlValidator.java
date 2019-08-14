@@ -295,9 +295,12 @@ public class UrlValidator implements Serializable {
      * @return true if the url is valid.
      */
     public boolean isValid(String value) {
-        if (value == null) {
+        
+    	
+    	if (value == null) {
             return false;
-        }
+    	  //	return true;
+    	}
 
         // Check the whole url address structure
         Matcher urlMatcher = URL_PATTERN.matcher(value);
@@ -330,13 +333,14 @@ public class UrlValidator implements Serializable {
         }
 
         if (!isValidQuery(urlMatcher.group(PARSE_URL_QUERY))) {
-            return false;
+			return false;
         }
 
         if (!isValidFragment(urlMatcher.group(PARSE_URL_FRAGMENT))) {
             return false;
         }
 
+		//return false;
         return true;
     }
 
@@ -391,7 +395,7 @@ public class UrlValidator implements Serializable {
         Matcher authorityMatcher = AUTHORITY_PATTERN.matcher(authorityASCII);
         if (!authorityMatcher.matches()) {
             return false;
-        }
+	}
 
         // We have to process IPV6 separately because that is parsed in a different group
         String ipv6 = authorityMatcher.group(PARSE_AUTHORITY_IPV6);
@@ -417,6 +421,10 @@ public class UrlValidator implements Serializable {
             if (port != null && port.length() > 0) {
                 try {
                     int iPort = Integer.parseInt(port);
+                    if (iPort == 80) {
+                    	return false;
+                  
+                    }
                     if (iPort < 0 || iPort > MAX_UNSIGNED_16_BIT_INT) {
                         return false;
                     }
@@ -441,11 +449,13 @@ public class UrlValidator implements Serializable {
      */
     protected boolean isValidPath(String path) {
         if (path == null) {
-            return false;
+            //return false;
+			return true;
         }
 
         if (!PATH_PATTERN.matcher(path).matches()) {
-            return false;
+            return true;
+        	//return false;
         }
 
         try {
@@ -477,7 +487,8 @@ public class UrlValidator implements Serializable {
             return true;
         }
 
-        return QUERY_PATTERN.matcher(query).matches();
+        //return QUERY_PATTERN.matcher(query).matches();
+		return false;
     }
 
     /**

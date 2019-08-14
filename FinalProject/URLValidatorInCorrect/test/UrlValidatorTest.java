@@ -495,6 +495,134 @@ protected void setUp() {
        assertTrue(validator.isValid("http://example.com/serach?address=Main+Avenue"));
    }
 
+	
+   public void testValidator10() { 
+//	  UrlValidator validator = new UrlValidator();
+       String[] schemes = {"http","https","ftp","ftps","ssh","gopher"};
+       UrlValidator validator = new UrlValidator(schemes, UrlValidator.NO_FRAGMENTS);
+      
+       
+	  assertTrue("http:// should validate",validator.isValid("http://google.com"));
+	  assertTrue("https:// should validate", validator.isValid("https://google.com"));
+	  assertTrue("ftp:// should validate", validator.isValid("ftp://google.com"));
+	  assertTrue("ftps:// should validate", validator.isValid("ftps://google.com"));
+	  assertTrue("ssh:// should validate", validator.isValid("ssh://google.com"));
+	  assertTrue("gopher should validate", validator.isValid("gopher://google.com"));
+	  assertFalse(":// should not validate", validator.isValid("://"));
+	  assertFalse("http:/ should not validate", validator.isValid("http:/"));
+	  assertFalse("http/ should not validate", validator.isValid("http/"));
+	  assertFalse("null should not validate", validator.isValid("null"));
+	  assertFalse("http://../ should not validate",	  validator.isValid("http://../")); 
+	  assertFalse("/http:// should not validate",	  validator.isValid("/http://"));
+	  assertFalse("http://# should not validate", validator.isValid("http://#"));
+	  assertFalse("http#:// should not validate", validator.isValid("http#://"));
+	  assertFalse("htp:// should not validate", validator.isValid("htp://"));
+	  
+   }
+   public void testValidator11() { 
+	   String[] schemes = {"http","https","ftp","ftps","ssh","gopher"};
+	   UrlValidator validator = new UrlValidator(schemes, UrlValidator.ALLOW_ALL_SCHEMES);
+	  
+	  assertTrue("http://www.url.com/features.htm#print should validate",validator.isValid("http://www.url.com/features.htm#print"));
+	  assertFalse("file://C:/test/file#fragment should not validate",validator.isValid("file://C:/test/file#fragment"));
+	  assertTrue("www.facebook.com should validate",validator.isValid("http://www.facebook.com"));
+	  assertTrue("WWW.FACEBOOK.COM should validate",validator.isValid("http://WWW.FACEBOOK.COM"));
+	  assertTrue("www.facebook.fr should validate",validator.isValid("http://www.facebook.fr"));
+	  assertTrue("127.0.0.1 should validate", validator.isValid("http://127.0.0.1"));
+	  assertTrue("255.255.255.255 should validate",	validator.isValid("http://255.255.255.255"));
+	  assertTrue("http://1337.net should validate",	validator.isValid("http://1337.net"));
+	  assertFalse("www.facebook.corm should not validate",validator.isValid("www.facebook.corm")); 
+	  assertFalse(" should not validate", validator.isValid("")); 
+	  assertFalse("zzz should not validate",validator.isValid("zzz")); 
+	  assertFalse("1.2.3 should not validate",validator.isValid("1.2.3")); 
+	  assertTrue(":80 should validate",validator.isValid("http://www.google.com:80")); 
+	  assertTrue(":65500 should validate",validator.isValid("http://www.google.com:65500")); 
+	  assertTrue("http://www.google.com:0 should validate", validator.isValid("http://www.google.com:0"));
+	  assertFalse(":0 should validate", validator.isValid("http://:0"));
+	  assertFalse(":0 should validate", validator.isValid(":0"));
+	  assertTrue("http://142.42.1.1:8080/ should validate",	  validator.isValid("http://142.42.1.1:8080/"));
+	  assertFalse("http://142.42.1.1:8080/ should not validate",	  validator.isValid("142.42.1.1:8080/"));
+	  assertFalse(":dfs should not validate", validator.isValid("http://:dfs"));
+	  assertFalse("78ojd should not validate", validator.isValid("http://78ojd"));
+	  assertFalse("-1 should not validate", validator.isValid("-1"));
+	  assertFalse("-1 should not validate", validator.isValid("http://-1"));
+	  assertFalse("http://:1000000 should not validate", validator.isValid("http://:1000000"));
+	  assertFalse(":1000000 should not validate", validator.isValid(":1000000"));
+   }
+   public void testValidator12() { 	  
+	   String[] schemes = {"http","https","ftp","ftps","ssh","gopher"};
+	   UrlValidator validator= new UrlValidator(new String[] {"http","file","mailto"}, UrlValidator.ALLOW_LOCAL_URLS);
+
+	  assertTrue("/ should validate", validator.isValid("http://aaa/"));
+	  assertTrue("/aaa should validate", validator.isValid("http://aaa"));
+	  assertFalse("/aaa/ should validate", validator.isValid("http://aaa//"));
+	  assertTrue("/aaa/ should validate", validator.isValid("http://aaa/aaa/"));
+	  assertTrue("/aaa/file should validate", validator.isValid("http://aaa/file"));
+	  assertTrue("/3783 should validate", validator.isValid("http://3783"));
+	  assertTrue("/3783543453543543 should validate", validator.isValid("http://3783543453543543"));
+	  assertFalse("/// should not validate", validator.isValid("http://///"));
+	  assertFalse("///hello should not validate", validator.isValid("http://///hello"));
+	  assertFalse("mailto:somebody@google.com should not validate", validator.isValid("mailto:somebody@google.com"));
+	  assertTrue("mailto:somebody@google.com should validate", validator.isValid("mailto://somebody@google.com"));
+   }
+   
+   public void testValidator13() { 
+	  String[] schemes = {"http","https","ftp","ftps","ssh","gopher"};
+	  UrlValidator validator = new UrlValidator(new String[] {"http","file","mailto"}, UrlValidator.ALLOW_LOCAL_URLS);
+
+	  assertTrue("somebody@google.com should validate",	  validator.isValid("mailto://somebody@google.com"));
+	  assertTrue("http://www.google.com should validate",  validator.isValid("http://www.google.com"));
+	  assertTrue("http://www.google.com/ should validate",  validator.isValid("http://www.google.com/"));
+	  assertTrue("http://www.google.com/apple should validate", validator.isValid("http://www.google.com/apple"));
+	  assertTrue("http://www.google.com/apple/ should validate", validator.isValid("http://www.google.com/apple/"));
+	  assertTrue("http://userid@google.com/ should validate", validator.isValid("http://userid@google.com/"));
+	  assertTrue("http://userid@google.com:8080 should validate", validator.isValid("http://userid@google.com:8080"));
+	  assertTrue("example.com/print?id=123,456 should validate", validator.isValid("http://example.com/print.do?=123,456"));
+	  assertTrue("example.com/print?=123,456 should validate", validator.isValid("http://example.com/print?=123,456"));
+	  assertTrue("http://www.test.com. should validate", validator.isValid("http://www.test.com."));
+	  assertTrue("file://www.test.com. should validate", validator.isValid("file://www.test.com."));
+	  assertFalse("fie://www.test.com. should validate", validator.isValid("fie://www.test.com."));
+	  assertFalse("file:// should not validate", validator.isValid("fie://"));
+	  assertFalse("www.test.com. should not validate", validator.isValid("www.test.com."));
+	  assertFalse("test.com. should not validate", validator.isValid("test.com."));
+	  assertFalse("//hello should cot validate", validator.isValid("//hello"));
+	  assertFalse("//hello/file should not validate",	  validator.isValid("//hello/file"));
+	  assertFalse("/hello//file should not validate",	  validator.isValid("/hello//file"));
+	  assertFalse("hello/…/ should not validate", validator.isValid("hello/…/"));
+	  assertFalse("/hello/…/ should not validate", validator.isValid("/hello/…/"));
+	  assertFalse("://…/ should not validate", validator.isValid("://…/"));
+	  assertFalse("http://-a.b.c should not validate",	  validator.isValid("http://-a.b.c"));
+	  assertFalse("http://a.-b.c should not validate",	  validator.isValid("http://a.-b.c"));
+	  assertFalse("http://a.b.,c should not validate",	  validator.isValid("http://a.b.,c")); 
+	  assertFalse(" should not validate",	  validator.isValid(""));
+	  assertFalse("javascript:alert(0);  should not validate",	  validator.isValid("javascript:alert(0); "));
+	  assertFalse("dot:. should not validate", validator.isValid("dot:."));
+	  assertFalse("javascript:alert('xss') should not validate",	  validator.isValid("javascript:alert('xss')"));
+	  assertFalse("http://142.42.1.1// should not validate",	  validator.isValid("http://142.42.1.1//"));
+	  assertFalse("http://142.42.1.1::8080/ should not validate",	  validator.isValid("http://142.42.1.1::8080/"));
+	  assertTrue("http://google.com/?q=Test%20URL-encoded%20stuff should validate"	  , validator.isValid("http://www.google.com/?q=Test%20URL-encoded%20stuff"));
+	  assertFalse("tel:+1234567890 should not validate",	  validator.isValid("tel:+1234567890"));
+	  assertFalse("+1234567890 should not validate",	  validator.isValid("+1234567890"));
+	  assertFalse("mailto: somebody@ should not validate",	  validator.isValid("mailto: somebody@"));
+	  assertFalse("somebody@ should not validate",	  validator.isValid("somebody@"));
+	  assertFalse("@ should not validate",	  validator.isValid("@"));
+	  assertFalse("mailto: should not validate", validator.isValid("mailto:"));
+	  assertFalse("mailto://@.com should not validate", validator.isValid("mailto://@.com"));
+	  assertFalse("http://www.google.com/?q=Test%20URL with spaces should not validate",	  validator.isValid("http://www.google.com/?q=Test%20URL with spaces"));
+	  assertTrue("?action=view should validate",	  validator.isValid("http://google.com/?action=view")); 
+	  assertFalse(" should validate",validator.isValid(" "));
+	  assertTrue("www.url.com/?url=has-querystring should validate",	  validator.isValid("http://www.url.com/?url=has-querystring"));
+	  assertTrue("www.url.com/?url=has-[querystring] should validate"	  , validator.isValid("http://www.url.com/?url=has-[querystring]"));
+	  assertTrue("www.url.com/?url=has-(querystring) should validate"	  , validator.isValid("http://www.url.com/?url=has-(querystring)"));
+	  assertTrue("www.url.com/?url=has-query,string should validate",	  validator.isValid("http://www.url.com/?url=has-query,string"));
+	  assertTrue("www.url.com/??url=has-querystring should validate",	  validator.isValid("http://www.url.com/??url=has-querystring"));
+	  assertTrue("www.url.com/?url=has-query%20string should validate",	  validator.isValid("http://www.url.com/?url=has-query%20string"));
+	  assertTrue("www.url.com/?url=has-query%20string?url=has-query%20string should validate",	  validator.isValid("http://www.url.com/?url=has-query%20string?url=has-query%20string"));
+	  assertTrue("http://machine/ should validate",	  validator.isValid("http://machine/"));
+	  assertFalse("machine/ should not validate",	  validator.isValid("machine/"));
+	  assertFalse(" should not validate",	  validator.isValid(null));
+	  }
+	 
    //-------------------- Test data for creating a composite URL
    /**
     * The data given below approximates the 4 parts of a URL
@@ -595,6 +723,7 @@ protected void setUp() {
                             new ResultPair("not_valid", false), // underscore not allowed
                             new ResultPair("HtTp", true),
                             new ResultPair("telnet", false)};
+
 
 
 }
