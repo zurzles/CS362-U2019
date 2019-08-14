@@ -369,6 +369,14 @@ protected void setUp() {
       assertTrue(true);
    }
 
+   //This will  test if using upper case of HTTP or HTTPS will work or not
+   public void testValidProtocool(){
+        UrlValidator validator = new UrlValidator();
+        assertTrue(urlValidator.isValid("HTTP://www.google.com/"));
+         assertTrue(urlValidator.isValid("HTTPS://www.google.com/"));
+         assertTrue(urlValidator.isValid("HTTPS://WWW.GOOGLE.COM/"));
+   }
+
    public void testValidator290() {
         UrlValidator validator = new UrlValidator();
         assertTrue(validator.isValid("http://xn--h1acbxfam.idn.icann.org/"));
@@ -495,13 +503,13 @@ protected void setUp() {
        assertTrue(validator.isValid("http://example.com/serach?address=Main+Avenue"));
    }
 
-	
-   public void testValidator10() { 
+
+   public void testValidator10() {
 //	  UrlValidator validator = new UrlValidator();
        String[] schemes = {"http","https","ftp","ftps","ssh","gopher"};
        UrlValidator validator = new UrlValidator(schemes, UrlValidator.NO_FRAGMENTS);
-      
-       
+
+
 	  assertTrue("http:// should validate",validator.isValid("http://google.com"));
 	  assertTrue("https:// should validate", validator.isValid("https://google.com"));
 	  assertTrue("ftp:// should validate", validator.isValid("ftp://google.com"));
@@ -512,17 +520,17 @@ protected void setUp() {
 	  assertFalse("http:/ should not validate", validator.isValid("http:/"));
 	  assertFalse("http/ should not validate", validator.isValid("http/"));
 	  assertFalse("null should not validate", validator.isValid("null"));
-	  assertFalse("http://../ should not validate",	  validator.isValid("http://../")); 
+	  assertFalse("http://../ should not validate",	  validator.isValid("http://../"));
 	  assertFalse("/http:// should not validate",	  validator.isValid("/http://"));
 	  assertFalse("http://# should not validate", validator.isValid("http://#"));
 	  assertFalse("http#:// should not validate", validator.isValid("http#://"));
 	  assertFalse("htp:// should not validate", validator.isValid("htp://"));
-	  
+
    }
-   public void testValidator11() { 
+   public void testValidator11() {
 	   String[] schemes = {"http","https","ftp","ftps","ssh","gopher"};
 	   UrlValidator validator = new UrlValidator(schemes, UrlValidator.ALLOW_ALL_SCHEMES);
-	  
+
 	  assertTrue("http://www.url.com/features.htm#print should validate",validator.isValid("http://www.url.com/features.htm#print"));
 	  assertFalse("file://C:/test/file#fragment should not validate",validator.isValid("file://C:/test/file#fragment"));
 	  assertTrue("www.facebook.com should validate",validator.isValid("http://www.facebook.com"));
@@ -531,12 +539,12 @@ protected void setUp() {
 	  assertTrue("127.0.0.1 should validate", validator.isValid("http://127.0.0.1"));
 	  assertTrue("255.255.255.255 should validate",	validator.isValid("http://255.255.255.255"));
 	  assertTrue("http://1337.net should validate",	validator.isValid("http://1337.net"));
-	  assertFalse("www.facebook.corm should not validate",validator.isValid("www.facebook.corm")); 
-	  assertFalse(" should not validate", validator.isValid("")); 
-	  assertFalse("zzz should not validate",validator.isValid("zzz")); 
-	  assertFalse("1.2.3 should not validate",validator.isValid("1.2.3")); 
-	  assertTrue(":80 should validate",validator.isValid("http://www.google.com:80")); 
-	  assertTrue(":65500 should validate",validator.isValid("http://www.google.com:65500")); 
+	  assertFalse("www.facebook.corm should not validate",validator.isValid("www.facebook.corm"));
+	  assertFalse(" should not validate", validator.isValid(""));
+	  assertFalse("zzz should not validate",validator.isValid("zzz"));
+	  assertFalse("1.2.3 should not validate",validator.isValid("1.2.3"));
+	  assertTrue(":80 should validate",validator.isValid("http://www.google.com:80"));
+	  assertTrue(":65500 should validate",validator.isValid("http://www.google.com:65500"));
 	  assertTrue("http://www.google.com:0 should validate", validator.isValid("http://www.google.com:0"));
 	  assertFalse(":0 should validate", validator.isValid("http://:0"));
 	  assertFalse(":0 should validate", validator.isValid(":0"));
@@ -549,7 +557,7 @@ protected void setUp() {
 	  assertFalse("http://:1000000 should not validate", validator.isValid("http://:1000000"));
 	  assertFalse(":1000000 should not validate", validator.isValid(":1000000"));
    }
-   public void testValidator12() { 	  
+   public void testValidator12() {
 	   String[] schemes = {"http","https","ftp","ftps","ssh","gopher"};
 	   UrlValidator validator= new UrlValidator(new String[] {"http","file","mailto"}, UrlValidator.ALLOW_LOCAL_URLS);
 
@@ -565,8 +573,8 @@ protected void setUp() {
 	  assertFalse("mailto:somebody@google.com should not validate", validator.isValid("mailto:somebody@google.com"));
 	  assertTrue("mailto:somebody@google.com should validate", validator.isValid("mailto://somebody@google.com"));
    }
-   
-   public void testValidator13() { 
+
+   public void testValidator13() {
 	  String[] schemes = {"http","https","ftp","ftps","ssh","gopher"};
 	  UrlValidator validator = new UrlValidator(new String[] {"http","file","mailto"}, UrlValidator.ALLOW_LOCAL_URLS);
 
@@ -588,14 +596,14 @@ protected void setUp() {
 	  assertFalse("//hello should cot validate", validator.isValid("//hello"));
 	  assertFalse("//hello/file should not validate",	  validator.isValid("//hello/file"));
 	  assertFalse("/hello//file should not validate",	  validator.isValid("/hello//file"));
-	  assertFalse("hello/…/ should not validate", validator.isValid("hello/…/"));
-	  assertFalse("/hello/…/ should not validate", validator.isValid("/hello/…/"));
-	  assertFalse("://…/ should not validate", validator.isValid("://…/"));
+	  assertFalse("hello/ï¿½/ should not validate", validator.isValid("hello/ï¿½/"));
+	  assertFalse("/hello/ï¿½/ should not validate", validator.isValid("/hello/ï¿½/"));
+	  assertFalse("://ï¿½/ should not validate", validator.isValid("://ï¿½/"));
 	  assertFalse("http://-a.b.c should not validate",	  validator.isValid("http://-a.b.c"));
 	  assertFalse("http://a.-b.c should not validate",	  validator.isValid("http://a.-b.c"));
-	  assertFalse("http://a.b.,c should not validate",	  validator.isValid("http://a.b.,c")); 
+	  assertFalse("http://a.b.,c should not validate",	  validator.isValid("http://a.b.,c"));
 	  assertFalse(" should not validate",	  validator.isValid(""));
-	  assertFalse("javascript:alert(0);  should not validate",	  validator.isValid("javascript:alert(0); "));
+	  assertFalse("javascript:alert(0);ï¿½ should not validate",	  validator.isValid("javascript:alert(0);ï¿½"));
 	  assertFalse("dot:. should not validate", validator.isValid("dot:."));
 	  assertFalse("javascript:alert('xss') should not validate",	  validator.isValid("javascript:alert('xss')"));
 	  assertFalse("http://142.42.1.1// should not validate",	  validator.isValid("http://142.42.1.1//"));
@@ -609,7 +617,7 @@ protected void setUp() {
 	  assertFalse("mailto: should not validate", validator.isValid("mailto:"));
 	  assertFalse("mailto://@.com should not validate", validator.isValid("mailto://@.com"));
 	  assertFalse("http://www.google.com/?q=Test%20URL with spaces should not validate",	  validator.isValid("http://www.google.com/?q=Test%20URL with spaces"));
-	  assertTrue("?action=view should validate",	  validator.isValid("http://google.com/?action=view")); 
+	  assertTrue("?action=view should validate",	  validator.isValid("http://google.com/?action=view"));
 	  assertFalse(" should validate",validator.isValid(" "));
 	  assertTrue("www.url.com/?url=has-querystring should validate",	  validator.isValid("http://www.url.com/?url=has-querystring"));
 	  assertTrue("www.url.com/?url=has-[querystring] should validate"	  , validator.isValid("http://www.url.com/?url=has-[querystring]"));
@@ -622,7 +630,7 @@ protected void setUp() {
 	  assertFalse("machine/ should not validate",	  validator.isValid("machine/"));
 	  assertFalse(" should not validate",	  validator.isValid(null));
 	  }
-	 
+
    //-------------------- Test data for creating a composite URL
    /**
     * The data given below approximates the 4 parts of a URL
