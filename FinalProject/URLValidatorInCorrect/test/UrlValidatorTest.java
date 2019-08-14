@@ -585,7 +585,7 @@ protected void setUp() {
 	  assertTrue("http://www.google.com/apple/ should validate", validator.isValid("http://www.google.com/apple/"));
 	  assertTrue("http://userid@google.com/ should validate", validator.isValid("http://userid@google.com/"));
 	  assertTrue("http://userid@google.com:8080 should validate", validator.isValid("http://userid@google.com:8080"));
-	  assertTrue("example.com/print?id=123,456 should validate", validator.isValid("http://example.com/print.do?=123,456"));
+	  assertTrue("example.com/print?id=123,456 should validate", validator.isValid("http://example.com/print.id?=123,456"));
 	  assertTrue("example.com/print?=123,456 should validate", validator.isValid("http://example.com/print?=123,456"));
 	  assertTrue("http://www.test.com. should validate", validator.isValid("http://www.test.com."));
 	  assertTrue("file://www.test.com. should validate", validator.isValid("file://www.test.com."));
@@ -593,7 +593,7 @@ protected void setUp() {
 	  assertFalse("file:// should not validate", validator.isValid("fie://"));
 	  assertFalse("www.test.com. should not validate", validator.isValid("www.test.com."));
 	  assertFalse("test.com. should not validate", validator.isValid("test.com."));
-	  assertFalse("//hello should cot validate", validator.isValid("//hello"));
+	  assertFalse("//hello should not validate", validator.isValid("//hello"));
 	  assertFalse("//hello/file should not validate",	  validator.isValid("//hello/file"));
 	  assertFalse("/hello//file should not validate",	  validator.isValid("/hello//file"));
 	  assertFalse("hello/../ should not validate", validator.isValid("hello/../"));
@@ -603,7 +603,7 @@ protected void setUp() {
 	  assertFalse("http://-a.a.a should not validate",	  validator.isValid("http://-a.a.a"));
 	  assertFalse("http://a.-a.a should not validate",	  validator.isValid("http://a.-a.a"));
 	  assertFalse("http://a.a.,a should not validate",	  validator.isValid("http://a.a.,a"));
-	  assertFalse(" should not validate",	  validator.isValid(""));
+	  assertFalse("    should not validate",	  validator.isValid(""));
 	  assertFalse("javascript:alert(0) should not validate",	  validator.isValid("javascript:alert(0)"));
 	  assertFalse("dot:. should not validate", validator.isValid("dot:."));
 	  assertFalse("javascript:alert('xss') should not validate",	  validator.isValid("javascript:alert('xss')"));
@@ -619,7 +619,7 @@ protected void setUp() {
 	  assertFalse("mailto://@.com should not validate", validator.isValid("mailto://@.com"));
 	  assertFalse("http://www.google.com/?q=Test%20URL with spaces should not validate",	  validator.isValid("http://www.google.com/?q=Test%20URL with spaces"));
 	  assertTrue("?action=view should validate",	  validator.isValid("http://google.com/?action=view"));
-	  assertFalse(" should validate",validator.isValid(" "));
+	  assertFalse(" should not validate",validator.isValid(" "));
 	  assertTrue("www.url.com/?url=has-querystring should validate",	  validator.isValid("http://www.url.com/?url=has-querystring"));
 	  assertTrue("www.url.com/?url=has-[querystring] should validate"	  , validator.isValid("http://www.url.com/?url=has-[querystring]"));
 	  assertTrue("www.url.com/?url=has-(querystring) should validate"	  , validator.isValid("http://www.url.com/?url=has-(querystring)"));
